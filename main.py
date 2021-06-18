@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from scipy.fftpack import fft2, dct, dst
 
 
 def add_zeros_plate(img):
@@ -42,27 +43,47 @@ def log_scale(mag_img):
 
 
 imgArr = []
-imgArr.append(cv2.imread('img/noise.png', cv2.IMREAD_GRAYSCALE))
-imgArr.append(cv2.imread('img/512x512-Gaussian-Noise.jpg', cv2.IMREAD_GRAYSCALE))
+# imgArr.append(cv2.imread('img/noise.png', cv2.IMREAD_GRAYSCALE))
+# imgArr.append(cv2.imread('img/512x512-Gaussian-Noise.jpg', cv2.IMREAD_GRAYSCALE))
+imgArr.append(cv2.imread('img/bibr.jpg', cv2.IMREAD_GRAYSCALE))
+# imgArr.append(cv2.imread('img/imageTextR.png', cv2.IMREAD_GRAYSCALE))
 for img in imgArr:
-    cv2.imshow("Input Image", img)
-
-    planes = add_zeros_plate(img)
-    complexI = cv2.merge(planes)
-
-    cv2.dft(complexI, complexI)  # this way the result may fit in the source matrix
-
-    cv2.split(complexI, planes)  # planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))
-    cv2.magnitude(planes[0], planes[1], planes[0])  # planes[0] = magnitude
-    magI = planes[0]
-
-    swap_quadrants(magI)
-    log_scale(magI)
-
-    cv2.normalize(magI, magI, 0, 1, cv2.NORM_MINMAX)  # Transform the matrix with float values into a
-
-    # Show the result
-    cv2.imshow("dft", magI)
+    # cv2.imshow("Input Image", img)
+    #
+    # planes = add_zeros_plate(img)
+    # complexI = cv2.merge(planes)
+    #
+    # cv2.dft(complexI, complexI)  # this way the result may fit in the source matrix
+    #
+    # cv2.split(complexI, planes)  # planes[0] = Re(DFT(I), planes[1] = Im(DFT(I))
+    # cv2.magnitude(planes[0], planes[1], planes[0])  # planes[0] = magnitude
+    # magI = planes[0]
+    #
+    # swap_quadrants(magI)
+    # log_scale(magI)
+    #
+    # cv2.normalize(magI, magI, 0, 1, cv2.NORM_MINMAX)  # Transform the matrix with float values into a
+    #
+    # # Show the result
+    # cv2.imshow("dft", magI)
+    # cv2.waitKey()
+    img_dct = dct(img)
+    img_fft = fft2(img)
+    img_dst = dst(img)
+    img2 = cv2.magnitude(img_fft.real, img_fft.imag)
+    swap_quadrants(img2)
+    log_scale(img2)
+    # cv2.normalize(img_dct, img_dct, 0, 1, cv2.NORM_MINMAX)
+    # log_scale(img_dct)
+    # log_scale(img_dst)
+    cv2.normalize(img2, img2, 0, 1, cv2.NORM_MINMAX)
+    print(img_dct)
+    # cv2.normalize(img_dst, img_dst, 0, 1, cv2.NORM_MINMAX)
+    cv2.imshow("fft real", img_fft.real)
+    cv2.imshow("fft imag", img_fft.imag)
+    cv2.imshow("dct", img_dct)
+    cv2.imshow("dst", img_dst)
+    cv2.imshow("fft", img2)
     cv2.waitKey()
 
 
