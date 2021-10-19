@@ -42,11 +42,8 @@ def log_scale(mag_img):
     cv2.log(mag_img, mag_img)
 
 
-imgArr = []
-# imgArr.append(cv2.imread('img/noise.png', cv2.IMREAD_GRAYSCALE))
-# imgArr.append(cv2.imread('img/512x512-Gaussian-Noise.jpg', cv2.IMREAD_GRAYSCALE))
-imgArr.append(cv2.imread('img/bibr.jpg', cv2.IMREAD_GRAYSCALE))
-# imgArr.append(cv2.imread('img/imageTextR.png', cv2.IMREAD_GRAYSCALE))
+img = cv2.imread('img/girl.png', cv2.IMREAD_GRAYSCALE)
+imgArr = [img]
 for img in imgArr:
     # cv2.imshow("Input Image", img)
     #
